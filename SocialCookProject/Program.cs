@@ -423,7 +423,6 @@ void Register(List<User> users)
 }
 
 void Login(List<User> users)
-
 {
 
     Console.Write("Enter your username:  ");
