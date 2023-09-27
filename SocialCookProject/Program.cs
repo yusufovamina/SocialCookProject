@@ -261,7 +261,7 @@ while (true)
             int ch = Menu(recpts);
 
             loggedInUser.SaveMeal(meals[ch - 1]);
-            loggedInUser.SaveMealsToFile("usersSavedMeals.txt", loggedInUser.SavedMeals);
+            SaveMealsToFile("usersSavedMeals.dat", loggedInUser.SavedMeals,loggedInUser.Name);
             var key7 = (Console.ReadKey().Key);
 
             if (key7 == ConsoleKey.LeftArrow)
@@ -291,7 +291,7 @@ while (true)
                 switch (profile_choice)
                 {
                     case 1:
-                        loggedInUser.SavedMeals = LoadRecipesFromFile("usersSavedMeals.txt");
+                        loggedInUser.SavedMeals = LoadRecipesFromFile("usersSavedMeals.dat",loggedInUser.Name);
                         loggedInUser.DisplaySavedRecipes();
                         break;
 
@@ -319,6 +319,56 @@ while (true)
 
 }
 
+
+
+ List<Meal> LoadRecipesFromFile(string filename,string name)
+{
+    string namefile = name + filename;
+    List<Meal> meals = new List<Meal>();
+
+    try
+    {
+
+        using (FileStream fs = new FileStream(namefile, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            meals = (List<Meal>)bf.Deserialize(fs);
+        }
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("File not found");
+    }
+    catch (SerializationException)
+    {
+        Console.WriteLine("Couldn't serialize the file");
+    }
+    return meals;
+}
+ void SaveMealsToFile(string filename, List<Meal> meals,string name)
+
+{
+    string namefile = name + filename;
+
+    try
+    {
+
+        using (FileStream fs = new FileStream(namefile, FileMode.Create))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(fs, meals);
+        }
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("File not found");
+    }
+    catch (SerializationException)
+    {
+        Console.WriteLine("Couldn't serialize the file");
+    }
+
+}
 
 #region Methods
 
@@ -563,56 +613,74 @@ string GetMaskedPassword()
 }
 
 
-List<Meal> LoadRecipesFromFile(string filename)
-{
-    List<Meal> meals = new List<Meal>();
-
-    using (StreamReader reader = new StreamReader(filename))
-    {
-        string line;
-        Meal currentMeal = new Meal();
-
-        while ((line = reader.ReadLine()) != null)
-        {
+//List<Meal> LoadRecipesFromFile(string filename)
+//{
+//    List<Meal> meals = new List<Meal>();
 
 
-            if (line == "---")
-            {
+//    try {
 
-                if (currentMeal != null)
-                    meals.Add(currentMeal);
-                //meals.Add(new Meal(nameof, dfjdfbn));//не получилось создавать тк переменные еще не обьявлены для того чтоб написать конструктор
-                currentMeal = new Meal();
-                continue;
+//        using (FileStream fs = new FileStream(filename,FileMode.Open))
+//        {
+//            BinaryFormatter bf= new BinaryFormatter();
+//            meals = (List<Meal>)bf.Deserialize(fs);
+//        }
+//    }
+//    catch (FileNotFoundException) {
+//        Console.WriteLine("File not found");
+//    }
+//    catch (SerializationException)
+//    {
+//        Console.WriteLine("Couldn't serialize the file");
+//    }
+//    return meals;
 
-            }
+//    //using (StreamReader reader = new StreamReader(filename))
+//    //{
+//    //    string line;
+//    //    Meal currentMeal = new Meal();
 
-            var parts = line.Split(new[] { ':' }, 2);
-            var key = parts[0].Trim();
-            var value = parts[1].Trim();
+//    //    while ((line = reader.ReadLine()) != null)
+//    //    {
 
-            switch (key)
-            {
-                case "Name":
-                    currentMeal.Name = value;
-                    break;
-                case "CookingTime":
-                    currentMeal.Recipe.CookingTime = int.Parse(value);
-                    break;
-                case "Ingredients":
-                    currentMeal.Recipe.Ingredients = new List<string>(value.Split(',').Select(i => i.Trim()));
-                    break;
-                case "Instructions":
-                    currentMeal.Recipe.Instructions = value;
-                    break;
-            }
 
-        }
+//    //        if (line == "---")
+//    //        {
 
-    }
+//    //            if (currentMeal != null)
+//    //                meals.Add(currentMeal);
+//    //            //meals.Add(new Meal(nameof, dfjdfbn));//не получилось создавать тк переменные еще не обьявлены для того чтоб написать конструктор
+//    //            currentMeal = new Meal();
+//    //            continue;
 
-    return meals.ToList();
-}
+//    //        }
+
+//    //        var parts = line.Split(new[] { ':' }, 2);
+//    //        var key = parts[0].Trim();
+//    //        var value = parts[1].Trim();
+
+//    //        switch (key)
+//    //        {
+//    //            case "Name":
+//    //                currentMeal.Name = value;
+//    //                break;
+//    //            case "CookingTime":
+//    //                currentMeal.Recipe.CookingTime = int.Parse(value);
+//    //                break;
+//    //            case "Ingredients":
+//    //                currentMeal.Recipe.Ingredients = new List<string>(value.Split(',').Select(i => i.Trim()));
+//    //                break;
+//    //            case "Instructions":
+//    //                currentMeal.Recipe.Instructions = value;
+//    //                break;
+//    //        }
+
+//    //    }
+
+//    //}
+
+//    //return meals.ToList();
+//}
 
 
 
@@ -633,7 +701,7 @@ class User : Person
 
     public string Username { get; set; }
     public string Password { get; set; }
-    public List<Meal> SavedMeals { get; set; } = new List<Meal> { new Meal { Name = " ", Recipe = null, Type = MealType.Breakfast } };
+    public List<Meal> SavedMeals { get; set; } = new List<Meal>();
 
 
     public User()
@@ -658,50 +726,7 @@ class User : Person
         Console.WriteLine($"Recipe '{meal.Name}' saved in your account.");
     }
 
-    List<Meal> LoadRecipesFromFile(string filename)
-    {
-        string namefile = Username + filename;
-        List<Meal> meals = new List<Meal>();
-
-        using (StreamReader reader = new StreamReader(namefile))
-        {
-            string line;
-
-
-            while ((line = reader.ReadLine()) != null)
-            {
-                Meal currentMeal = null;
-
-
-                var parts = line.Split(new[] { ':' }, 2);
-                var key = parts[0].Trim();
-                var value = parts[1].Trim();
-
-                switch (key)
-                {
-                    case "Name":
-                        currentMeal.Name = value;
-                        break;
-                    case "CookingTime":
-                        currentMeal.Recipe.CookingTime = int.Parse(value);
-                        break;
-                    case "Ingredients":
-                        currentMeal.Recipe.Ingredients = new List<string>(value.Split(',').Select(i => i.Trim()));
-                        break;
-                    case "Instructions":
-                        currentMeal.Recipe.Instructions = value;
-                        break;
-                }
-
-
-                if (currentMeal != null)
-                    meals.Add(currentMeal);
-            }
-        }
-
-        return meals.ToList();
-    }
-
+  
 
     public void DisplaySavedRecipes()
     {
@@ -712,8 +737,6 @@ class User : Person
         }
         else
         {
-
-
             foreach (var meal in SavedMeals)
             {
                 if (meal.Recipe != null)
@@ -725,25 +748,7 @@ class User : Person
         }
     }
 
-    public void SaveMealsToFile(string filename, List<Meal> meals)
-        
-    {
-        string namefile = Username + filename;
-        using (StreamWriter writer = new StreamWriter(namefile))
-        {
-            if (meals != null)
-            {
-                foreach (var meal in meals)
-                {
-                    writer.WriteLine($"Name: {meal.Name}\nType: {meal.Type}");
-                    writer.WriteLine($"CookingTime: {meal.Recipe.CookingTime}");
-                    writer.WriteLine($"Ingredients: {string.Join(", ", meal.Recipe.Ingredients)}");
-                    writer.WriteLine($"Instructions: {meal.Recipe.Instructions}");
-                    writer.WriteLine("---");
-                }
-            }
-        }
-    }
+ 
 
 
     public void AddRecipe(List<Meal> meals)
