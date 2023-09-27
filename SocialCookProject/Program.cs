@@ -102,7 +102,7 @@ new Meal
         Name = "Grilled Salmon",
         Ingredients = new List<string> { "Salmon Fillets", "Lemon", "Garlic", "Olive Oil", "Salt", "Pepper" },
         Instructions = "Marinate salmon fillets in lemon juice, minced garlic, olive oil, salt, and pepper. Grill until fish is cooked through and flakes easily.",
-        CookingTime = 15
+        CookingTime = 60
     },
     }
 
@@ -145,7 +145,7 @@ while (true)
 {
 
     string[] menu = new string[] {
-    "1. See all recipes",
+    "1. See recipes",
     "2. Add your recipe",
     "3. Find recipe by ingrediens",
     "4. Save recipes",
@@ -158,7 +158,78 @@ while (true)
     {
         case 1:
 
-            meals.ForEach(Console.WriteLine);
+            string[] displayMenu = new string[]
+            {
+                "1. See all recipes",
+                "2. See breakfast meals",
+                "3. See lunch meals",
+                "4. See dinner meals",
+                "5. See dessert meals",
+                "6. See fast-cookking meals"
+            };
+            int choice3 = Menu(displayMenu);
+            switch(choice3){
+                case 1:   
+                    meals.ForEach(Console.WriteLine);
+                    var k = (Console.ReadKey().Key);
+                    if (k == ConsoleKey.LeftArrow)
+                    {
+                        break;
+                    }
+                    break;
+                case 2:
+                    var breakfastMeals = meals.Where(x=>x.Type==MealType.Breakfast).ToList();
+                    breakfastMeals.ForEach(Console.WriteLine);
+                    var k1 = (Console.ReadKey().Key);
+                    if (k1 == ConsoleKey.LeftArrow)
+                    {
+                        break;
+                    }
+                    break;
+                case 3:
+                    var lunchMeals = meals.Where(x => x.Type == MealType.Lunch).ToList();
+                    lunchMeals.ForEach(Console.WriteLine);
+                    var k2 = (Console.ReadKey().Key);
+                    if (k2 == ConsoleKey.LeftArrow)
+                    {
+                        break;
+                    }
+                    break;
+                case 4:
+                    var dinnerMeals = meals.Where(x => x.Type == MealType.Dinner).ToList();
+                    dinnerMeals.ForEach(Console.WriteLine);
+                    var k3 = (Console.ReadKey().Key);
+                    if (k3 == ConsoleKey.LeftArrow)
+                    {
+                        break;
+                    }
+                    break;
+                case 5:
+                    var dessertMeals = meals.Where(x => x.Type == MealType.Dessert).ToList();
+                    dessertMeals.ForEach(Console.WriteLine);
+                    var k4 = (Console.ReadKey().Key);
+                    if (k4 == ConsoleKey.LeftArrow)
+                    {
+                        break;
+                    }
+                    break;
+                case 6:
+                    int time;
+                    Console.WriteLine("How much time do you have?");
+                    time=int.Parse(Console.ReadLine());
+                    var timingMeals=meals.Where(x=>x.Recipe.CookingTime<=time).ToList();
+                    if (timingMeals == null)
+                    {
+                        Console.WriteLine("None");
+                    }
+                    timingMeals.ForEach(Console.WriteLine);
+                    var k5 = (Console.ReadKey().Key);
+                    if (k5 == ConsoleKey.LeftArrow) break;
+                    
+                    break;
+
+            }
+
             var key = (Console.ReadKey().Key);
             if (key == ConsoleKey.LeftArrow)
             {
@@ -413,6 +484,11 @@ void Register(List<User> users)
 
     Console.Write("Enter a password: ");
     string password = GetMaskedPassword();
+    while(!isStrongPassword(password))
+    {
+        Console.Write("Enter a password: ");
+        password = GetMaskedPassword();
+    }
 
 
     loggedInUser = new User(name, surname, age, username, password);
@@ -447,6 +523,19 @@ void Login(List<User> users)
     }
     Console.WriteLine($"Welcome, {username}!");
 
+}
+
+bool isStrongPassword(string password)
+{
+    if (password.Length<8) return false;
+
+    bool hasUpper=false, hasLower=false, hasNumb=false;
+
+    if (password.Any(char.IsUpper)) { hasUpper = true; }
+     if (password.Any(char.IsLower)) { hasLower = true; }
+     if (password.Any(char.IsDigit)) { hasNumb = true; }
+    return hasUpper&&hasUpper && hasLower;
+    
 }
 
 string GetMaskedPassword()
