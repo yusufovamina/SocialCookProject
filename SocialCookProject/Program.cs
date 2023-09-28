@@ -7,7 +7,7 @@ using System.Text.Json;
 
 List<User> users = LoadUserCredentials();
 User loggedInUser = new User();
-
+loggedInUser.YourMeals = LoadRecipesFromFile("userMeals.dat", loggedInUser.Username);
 List<Meal> meals = new List<Meal> {
     new Meal
     {
@@ -237,7 +237,7 @@ while (true)
             }
             break;
         case 2:
-            loggedInUser.AddRecipe(meals);
+            loggedInUser.AddRecipe(meals,loggedInUser.YourMeals);
             var key1 = (Console.ReadKey().Key);
             if (key1 == ConsoleKey.LeftArrow)
             {
@@ -296,8 +296,9 @@ while (true)
                         break;
 
                     case 2:
-                        var your_meals = meals.Where(x => x.Recipe.Author == loggedInUser.Username).ToList();
-                        your_meals.ForEach(Console.WriteLine);
+                        
+                        loggedInUser.YourMeals.ForEach(Console.WriteLine);
+                       
                         break;
 
                 }
@@ -319,6 +320,10 @@ while (true)
 
 }
 
+
+
+
+#region Methods
 
 
  List<Meal> LoadRecipesFromFile(string filename,string name)
@@ -369,37 +374,50 @@ while (true)
     }
 
 }
-
-#region Methods
-
-
 void startAnimation()
 {
     string asciiArt = @"
-   (\
-    \ \
- __    \/ ___,.-------..__        __
-//\\ _,-'\\               `'--._ //\\
-\\ ;'      \\                   `: //
- `(          \\                   )'
-   :.          \\,----,         ,;
-    `.`--.___   (    /  ___.--','
-      `.     ``-----'-''     ,'
-         -.               ,-
-            `-._______.-'
+                    (\
+                     \\
+                 __    \\___,.-------..__         __
+                //\\ _,-'\\               `'--._ //\\
+                \\ ;'      \\                   `: //
+                 `(          \\                   )'
+                   :.          \\,----,         ,;
+                    `.`--.___   (    /  ___.--','
+                      `.     ``-----'-''     ,'
+                         -.               ,-
+                            `-._______.-'
 ";
 
-    for(int i = 0; i < 20; i++)
+    string greeting = @"
+.d88888b                    oo          dP  a88888b.                   dP       
+88.    ""'                              88 d8'   `88                   88       
+`Y88888b. .d8888b. .d8888b. dP .d8888b. 88 88        .d8888b. .d8888b. 88  .dP  
+      `8b 88'  `88 88'  `"""" 88 88'  `88 88 88        88'  `88 88'  `88 88888""   
+d8'   .8P 88.  .88 88.  ... 88 88.  .88 88 Y8.   .88 88.  .88 88.  .88 88  `8b. 
+ Y88888P  `88888P' `88888P' dP `88888P8 dP  Y88888P' `88888P' `88888P' dP   `YP 
+
+";
+
+    
+     
+
+
+    for (int i = 0; i < 20; i++)
     {
         try
-        {
-            Console.Clear();
-            Console.ForegroundColor = (ConsoleColor)i;
-            Console.WriteLine(asciiArt);
-            Thread.Sleep(100);
+        { 
+                Console.Clear();
+                Console.ForegroundColor = (ConsoleColor)i;
+                Console.WriteLine(greeting);
+                Console.WriteLine();
+                Console.WriteLine(asciiArt);
+                Thread.Sleep(100);
+            
         }
         catch (Exception) {}
-    }
+   }
 }
 
 static void DisplayMenu(string[] menu, int selectedOption)
@@ -658,9 +676,9 @@ class User : Person
 
     public string Username { get; set; }
     public string Password { get; set; }
-    public List<Meal> SavedMeals { get; set; } = new List<Meal>();
+    public List<Meal> SavedMeals { get; set; } 
 
-
+    public List<Meal> YourMeals { get; set; } = new List<Meal>();
     public User()
     {
 
@@ -673,6 +691,7 @@ class User : Person
         Username = username;
         Password = password;
         SavedMeals = new List<Meal>();
+        YourMeals = new List<Meal>();
     }
 
 
@@ -705,10 +724,33 @@ class User : Person
         }
     }
 
- 
 
+    void SaveUsersMealsToFile(string filename, List<Meal> meals, string name)
 
-    public void AddRecipe(List<Meal> meals)
+    {
+        string namefile = name + filename;
+
+        try
+        {
+
+            using (FileStream fs = new FileStream(namefile, FileMode.Create))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, meals);
+            }
+        }
+        catch (FileNotFoundException)
+        {
+            Console.WriteLine("File not found");
+        }
+        catch (SerializationException)
+        {
+            Console.WriteLine("Couldn't serialize the file");
+        }
+
+    }
+
+    public void AddRecipe(List<Meal> meals, List<Meal> YourMeals)
 
     {
         Console.Write("Enter recipe name: ");
@@ -753,7 +795,8 @@ class User : Person
 
         Meal newMeal = new Meal(name, type, new Recipe(name, ingredients, instructions, time, this.Username));
 
-
+        YourMeals.Add(newMeal);
+        SaveUsersMealsToFile("userMeals.dat", YourMeals, Username);
 
         meals.Add(newMeal);
 
