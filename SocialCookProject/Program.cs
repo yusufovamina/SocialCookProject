@@ -108,7 +108,7 @@ new Meal
 
 };
 
-
+startAnimation();
 Console.WriteLine("Welcome!");
 string[] startMenu = new string[]
 {"Register",
@@ -373,7 +373,34 @@ while (true)
 #region Methods
 
 
+void startAnimation()
+{
+    string asciiArt = @"
+   (\
+    \ \
+ __    \/ ___,.-------..__        __
+//\\ _,-'\\               `'--._ //\\
+\\ ;'      \\                   `: //
+ `(          \\                   )'
+   :.          \\,----,         ,;
+    `.`--.___   (    /  ___.--','
+      `.     ``-----'-''     ,'
+         -.               ,-
+            `-._______.-'
+";
 
+    for(int i = 0; i < 20; i++)
+    {
+        try
+        {
+            Console.Clear();
+            Console.ForegroundColor = (ConsoleColor)i;
+            Console.WriteLine(asciiArt);
+            Thread.Sleep(100);
+        }
+        catch (Exception) {}
+    }
+}
 
 static void DisplayMenu(string[] menu, int selectedOption)
 {
@@ -613,76 +640,6 @@ string GetMaskedPassword()
 }
 
 
-//List<Meal> LoadRecipesFromFile(string filename)
-//{
-//    List<Meal> meals = new List<Meal>();
-
-
-//    try {
-
-//        using (FileStream fs = new FileStream(filename,FileMode.Open))
-//        {
-//            BinaryFormatter bf= new BinaryFormatter();
-//            meals = (List<Meal>)bf.Deserialize(fs);
-//        }
-//    }
-//    catch (FileNotFoundException) {
-//        Console.WriteLine("File not found");
-//    }
-//    catch (SerializationException)
-//    {
-//        Console.WriteLine("Couldn't serialize the file");
-//    }
-//    return meals;
-
-//    //using (StreamReader reader = new StreamReader(filename))
-//    //{
-//    //    string line;
-//    //    Meal currentMeal = new Meal();
-
-//    //    while ((line = reader.ReadLine()) != null)
-//    //    {
-
-
-//    //        if (line == "---")
-//    //        {
-
-//    //            if (currentMeal != null)
-//    //                meals.Add(currentMeal);
-//    //            //meals.Add(new Meal(nameof, dfjdfbn));//не получилось создавать тк переменные еще не обьявлены для того чтоб написать конструктор
-//    //            currentMeal = new Meal();
-//    //            continue;
-
-//    //        }
-
-//    //        var parts = line.Split(new[] { ':' }, 2);
-//    //        var key = parts[0].Trim();
-//    //        var value = parts[1].Trim();
-
-//    //        switch (key)
-//    //        {
-//    //            case "Name":
-//    //                currentMeal.Name = value;
-//    //                break;
-//    //            case "CookingTime":
-//    //                currentMeal.Recipe.CookingTime = int.Parse(value);
-//    //                break;
-//    //            case "Ingredients":
-//    //                currentMeal.Recipe.Ingredients = new List<string>(value.Split(',').Select(i => i.Trim()));
-//    //                break;
-//    //            case "Instructions":
-//    //                currentMeal.Recipe.Instructions = value;
-//    //                break;
-//    //        }
-
-//    //    }
-
-//    //}
-
-//    //return meals.ToList();
-//}
-
-
 
 
 #endregion
@@ -846,6 +803,7 @@ class User : Person
         return $"Name: {Name}\nSurname: {Surname}\nAge: {Age}\nUsername: {Username}";
     }
 }
+[Serializable]
 class Recipe
 {
     public string Name { get; set; }
@@ -892,6 +850,7 @@ interface IMeal
 
 }
 
+[Serializable]
 class Meal : IMeal
 {
     public string Name { get; set; }
