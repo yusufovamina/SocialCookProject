@@ -3,110 +3,113 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
-using System.Text.Json;
+
 
 List<User> users = LoadUserCredentials();
 User loggedInUser = new User();
-loggedInUser.YourMeals = LoadRecipesFromFile("userMeals.dat", loggedInUser.Username);
-List<Meal> meals = new List<Meal> {
-    new Meal
-    {
-        Name="Scrambled Eggs",
-        Type=MealType.Breakfast,
-        Recipe= new Recipe
-    {
-        Name = "Scrambled Eggs",
-        Ingredients = new List<string> { "Eggs", "Milk", "Salt", "Pepper" },
-        Instructions = "Whisk eggs, milk, salt, and pepper in a bowl. Heat a non-stick skillet over medium heat. Pour egg mixture into the skillet and cook, stirring, until eggs are set.",
-        CookingTime = 10
-    },
-    },
-    new Meal{
-    Name="Pancakes",
-    Type=MealType.Breakfast,
-    Recipe = new Recipe
-    {
-        Name = "Pancakes",
-        Ingredients = new List<string> { "Flour", "Milk", "Eggs", "Baking Powder", "Salt", "Sugar" },
-        Instructions = "In a bowl, mix flour, baking powder, salt, and sugar. In a separate bowl, whisk eggs, add milk and mix well. Combine wet and dry ingredients. Cook spoonfuls of the batter on a greased pan until bubbles form, then flip and cook the other side.",
-        CookingTime = 20
-    },
-    },
-new Meal
-{
-    Name="Chicken Salad",
-    Type=MealType.Lunch,
-    Recipe= new Recipe
-    {
-        Name = "Chicken Salad",
-        Ingredients = new List<string> { "Chicken Breast", "Lettuce", "Tomatoes", "Cucumbers", "Olives", "Olive Oil", "Salt", "Pepper" },
-        Instructions = "Grill the chicken breast, slice into strips. Mix with lettuce, tomatoes, cucumbers, and olives. Drizzle with olive oil and season with salt and pepper.",
-        CookingTime = 30
-    },
-},
-    new Meal
-{
-    Name="Vegetarian Pasta",
-    Type=MealType.Lunch,
-    Recipe=  new Recipe
-    {
-        Name = "Vegetarian Pasta",
-        Ingredients = new List<string> { "Pasta", "Bell Peppers", "Zucchini", "Cherry Tomatoes", "Olive Oil", "Garlic", "Basil", "Salt", "Pepper" },
-        Instructions = "Cook pasta according to package instructions. In a pan, sauté chopped vegetables and garlic in olive oil. Toss with cooked pasta. Season with salt, pepper, and fresh basil.",
-        CookingTime = 25
-    },
-    },
-    new Meal
-    {
-   Name="Chocolate Cake",
-    Type = MealType.Dessert,
 
-    Recipe=new Recipe
-    {
-    Name = "Chocolate Cake",
-    Ingredients = new List<string> { "Flour", "Sugar", "Cocoa Powder", "Baking Powder", "Salt", "Eggs", "Milk", "Vegetable Oil", "Vanilla Extract" },
-    Instructions = "Mix dry ingredients, then add wet ingredients. Pour into a cake pan and bake in a preheated oven. Allow to cool before frosting.",
-    CookingTime = 40
-},
-    },
-    new Meal
-    {
-        Name="Pizza Margarita",
-        Type =MealType.Dinner,
-        Recipe= new Recipe
-        {
-            Name = "Pizza Margarita",
-            Ingredients = new List<string> { "Pizza Dough", "Tomato Sauce", "Fresh Mozzarella", "Fresh Basil", "Olive Oil", "Salt" },
-            Instructions = "Preheat oven to 475°F (245°C). Roll out the pizza dough. Spread tomato sauce over the dough. Add slices of fresh mozzarella. Bake in the preheated oven until crust is golden and cheese is bubbly. Top with fresh basil leaves and a drizzle of olive oil.",
-            CookingTime = 20
-        }
-    },
-    new Meal
-    {
-        Name="Fruit Salad",
-        Type=MealType.Dessert,
-        Recipe=new Recipe
-    {
-        Name = "Fruit Salad",
-        Ingredients = new List<string> { "Assorted Fruits (e.g., apples, bananas, berries, oranges)", "Honey", "Lemon Juice", "Mint Leaves" },
-        Instructions = "Cut fruits into bite-sized pieces and mix in a bowl. Drizzle with honey and lemon juice. Garnish with mint leaves.",
-        CookingTime = 15
-    },
-    },
-    new Meal
-    {
-        Name="Grilled Salmon",
-        Type=MealType.Dinner,
-        Recipe= new Recipe
-    {
-        Name = "Grilled Salmon",
-        Ingredients = new List<string> { "Salmon Fillets", "Lemon", "Garlic", "Olive Oil", "Salt", "Pepper" },
-        Instructions = "Marinate salmon fillets in lemon juice, minced garlic, olive oil, salt, and pepper. Grill until fish is cooked through and flakes easily.",
-        CookingTime = 60
-    },
-    }
+List<Meal> meals = LoadRecipesFromFile("AllMeals.dat");
+//    new List<Meal> {
+//    new Meal
+//    {
+//        Name="Scrambled Eggs",
+//        Type=MealType.Breakfast,
+//        Recipe= new Recipe
+//    {
+//        Name = "Scrambled Eggs",
+//        Ingredients = new List<string> { "Eggs", "Milk", "Salt", "Pepper" },
+//        Instructions = "Whisk eggs, milk, salt, and pepper in a bowl. Heat a non-stick skillet over medium heat. Pour egg mixture into the skillet and cook, stirring, until eggs are set.",
+//        CookingTime = 10
+//    },
+//    },
+//    new Meal{
+//    Name="Pancakes",
+//    Type=MealType.Breakfast,
+//    Recipe = new Recipe
+//    {
+//        Name = "Pancakes",
+//        Ingredients = new List<string> { "Flour", "Milk", "Eggs", "Baking Powder", "Salt", "Sugar" },
+//        Instructions = "In a bowl, mix flour, baking powder, salt, and sugar. In a separate bowl, whisk eggs, add milk and mix well. Combine wet and dry ingredients. Cook spoonfuls of the batter on a greased pan until bubbles form, then flip and cook the other side.",
+//        CookingTime = 20
+//    },
+//    },
+//new Meal
+//{
+//    Name="Chicken Salad",
+//    Type=MealType.Lunch,
+//    Recipe= new Recipe
+//    {
+//        Name = "Chicken Salad",
+//        Ingredients = new List<string> { "Chicken Breast", "Lettuce", "Tomatoes", "Cucumbers", "Olives", "Olive Oil", "Salt", "Pepper" },
+//        Instructions = "Grill the chicken breast, slice into strips. Mix with lettuce, tomatoes, cucumbers, and olives. Drizzle with olive oil and season with salt and pepper.",
+//        CookingTime = 30
+//    },
+//},
+//    new Meal
+//{
+//    Name="Vegetarian Pasta",
+//    Type=MealType.Lunch,
+//    Recipe=  new Recipe
+//    {
+//        Name = "Vegetarian Pasta",
+//        Ingredients = new List<string> { "Pasta", "Bell Peppers", "Zucchini", "Cherry Tomatoes", "Olive Oil", "Garlic", "Basil", "Salt", "Pepper" },
+//        Instructions = "Cook pasta according to package instructions. In a pan, sauté chopped vegetables and garlic in olive oil. Toss with cooked pasta. Season with salt, pepper, and fresh basil.",
+//        CookingTime = 25
+//    },
+//    },
+//    new Meal
+//    {
+//   Name="Chocolate Cake",
+//    Type = MealType.Dessert,
 
-};
+//    Recipe=new Recipe
+//    {
+//    Name = "Chocolate Cake",
+//    Ingredients = new List<string> { "Flour", "Sugar", "Cocoa Powder", "Baking Powder", "Salt", "Eggs", "Milk", "Vegetable Oil", "Vanilla Extract" },
+//    Instructions = "Mix dry ingredients, then add wet ingredients. Pour into a cake pan and bake in a preheated oven. Allow to cool before frosting.",
+//    CookingTime = 40
+//},
+//    },
+//    new Meal
+//    {
+//        Name="Pizza Margarita",
+//        Type =MealType.Dinner,
+//        Recipe= new Recipe
+//        {
+//            Name = "Pizza Margarita",
+//            Ingredients = new List<string> { "Pizza Dough", "Tomato Sauce", "Fresh Mozzarella", "Fresh Basil", "Olive Oil", "Salt" },
+//            Instructions = "Preheat oven to 475°F (245°C). Roll out the pizza dough. Spread tomato sauce over the dough. Add slices of fresh mozzarella. Bake in the preheated oven until crust is golden and cheese is bubbly. Top with fresh basil leaves and a drizzle of olive oil.",
+//            CookingTime = 20
+//        }
+//    },
+//    new Meal
+//    {
+//        Name="Fruit Salad",
+//        Type=MealType.Dessert,
+//        Recipe=new Recipe
+//    {
+//        Name = "Fruit Salad",
+//        Ingredients = new List<string> { "Assorted Fruits (e.g., apples, bananas, berries, oranges)", "Honey", "Lemon Juice", "Mint Leaves" },
+//        Instructions = "Cut fruits into bite-sized pieces and mix in a bowl. Drizzle with honey and lemon juice. Garnish with mint leaves.",
+//        CookingTime = 15
+//    },
+//    },
+//    new Meal
+//    {
+//        Name="Grilled Salmon",
+//        Type=MealType.Dinner,
+//        Recipe= new Recipe
+//    {
+//        Name = "Grilled Salmon",
+//        Ingredients = new List<string> { "Salmon Fillets", "Lemon", "Garlic", "Olive Oil", "Salt", "Pepper" },
+//        Instructions = "Marinate salmon fillets in lemon juice, minced garlic, olive oil, salt, and pepper. Grill until fish is cooked through and flakes easily.",
+//        CookingTime = 60
+//    },
+//    }
+
+//};
+
+
 
 startAnimation();
 Console.WriteLine("Welcome!");
@@ -291,12 +294,12 @@ while (true)
                 switch (profile_choice)
                 {
                     case 1:
-                        loggedInUser.SavedMeals = LoadRecipesFromFile("usersSavedMeals.dat",loggedInUser.Name);
+                        loggedInUser.SavedMeals = LoadRecipesFromFile1("usersSavedMeals.dat",loggedInUser.Name);
                         loggedInUser.DisplaySavedRecipes();
                         break;
 
                     case 2:
-                        
+                        loggedInUser.YourMeals = meals.Where(x => x.Recipe.Author == loggedInUser.Username).ToList();
                         loggedInUser.YourMeals.ForEach(Console.WriteLine);
                        
                         break;
@@ -324,9 +327,32 @@ while (true)
 
 
 #region Methods
+List<Meal> LoadRecipesFromFile(string filename)
+{
+    
+    List<Meal> meals = new List<Meal>();
 
+    try
+    {
 
- List<Meal> LoadRecipesFromFile(string filename,string name)
+        using (FileStream fs = new FileStream(filename, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            meals = (List<Meal>)bf.Deserialize(fs);
+        }
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("File not found");
+    }
+    catch (SerializationException)
+    {
+        Console.WriteLine("Couldn't serialize the file");
+    }
+    return meals;
+}
+
+List<Meal> LoadRecipesFromFile1(string filename,string name)
 {
     string namefile = name + filename;
     List<Meal> meals = new List<Meal>();
@@ -749,7 +775,28 @@ class User : Person
         }
 
     }
+ static   void SaveUsersMealsToFile(string filename, List<Meal> meals)
+    {
+        try
+        {
 
+            using (FileStream fs = new FileStream(filename, FileMode.Create))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, meals);
+            }
+        }
+        catch (FileNotFoundException)
+        {
+            Console.WriteLine("File not found");
+        }
+        catch (SerializationException)
+        {
+            Console.WriteLine("Couldn't serialize the file");
+        }
+
+    }
+    fileOperationsDelegate saving = new(SaveUsersMealsToFile);
     public void AddRecipe(List<Meal> meals, List<Meal> YourMeals)
 
     {
@@ -797,9 +844,10 @@ class User : Person
 
         YourMeals.Add(newMeal);
         SaveUsersMealsToFile("userMeals.dat", YourMeals, Username);
-
         meals.Add(newMeal);
 
+        saving("Allmeals.dat", meals);
+        
 
         Console.WriteLine("Recipe added successfully!");
     }
@@ -900,21 +948,16 @@ class Meal : IMeal
     public MealType Type { get; set; }
     public Recipe Recipe { get; set; }
     public Meal()
-    {
-
-    }
+    {}
     public Meal(string name, MealType type, Recipe recipe)
     {
         Name = name; Type = type; Recipe = recipe;
     }
     public override string ToString()
     {
-
-
         return $"\t\t{Name}\n\t\t-{Type}\n{Recipe}";
-
     }
 
 }
 
-
+delegate void fileOperationsDelegate(string filename, List<Meal> meals);
