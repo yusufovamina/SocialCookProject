@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Xml.Linq;
 
 
 List<User> users = LoadUserCredentials();
@@ -110,7 +111,7 @@ new Meal
 };
 
 //List<Meal> list = LoadRecipesFromFile1("AllMeals.dat","");
-//meals= LoadRecipesFromFile1("AllMeals.dat","");
+meals= LoadRecipesFromFile1("AllMeals.dat","");
 startAnimation();
 Console.WriteLine("Welcome!");
 string[] startMenu = new string[]
@@ -149,11 +150,12 @@ while (true)
 
     string[] menu = new string[] {
     "1. See recipes",
-    "2. Add your recipe",
-    "3. Find recipe by ingrediens",
-    "4. Save recipes",
-    "5. Your profile",
-    "6. Exit"
+    "2. Rate and comment recipes",
+    "3. Add your recipe",
+    "4. Find recipe by ingrediens",
+    "5. Save recipes",
+    "6. Your profile",
+    "7. Exit"
  };
 
     int choice2 = Menu(menu);
@@ -174,15 +176,8 @@ while (true)
             int choice3 = Menu(displayMenu);
             switch(choice3){
                 case 1:
-                    meals[2].comments = new List<Comment> { new Comment { Rate = 4, Commentariy = "Good!" } };
-                   foreach(var m in meals)
-                    {
-                        Console.WriteLine(m);
-                       foreach(var c in m.comments)
-                        {
-                            Console.WriteLine(c);
-                        }
-                    }
+                    
+                    meals.ForEach(Console.WriteLine);
                     var k = (Console.ReadKey().Key);
                     if (k == ConsoleKey.LeftArrow)
                     {
@@ -245,10 +240,34 @@ while (true)
             var key = (Console.ReadKey().Key);
             if (key == ConsoleKey.LeftArrow)
             {
+                
                 break;
             }
             break;
+
         case 2:
+            var names = meals.Select(x => x.Name).ToArray();
+            int ch1 = Menu(names);
+            Console.Write("Enter your comment: ");
+            string com = Console.ReadLine(); 
+            Console.Write("Enter your rating (1-5): ");
+            int rate=int.Parse(Console.ReadLine());
+            while ( !(rate >= 1) && !(rate <= 5))
+            {
+               Console.WriteLine("Invalid rating. Comment not added. Try again: ");
+                Console.Write("Enter your rating (1-5): ");
+                int.Parse(Console.ReadLine());
+            }
+            
+          
+          Console.WriteLine("Comment added successfully!");
+               
+
+            meals[ch1 ].AddComment(loggedInUser.Username, rate,com);
+            SaveMealsToFile("AllMeals.dat", meals, "");
+
+            break;
+        case 3:
             loggedInUser.AddRecipe(meals,loggedInUser.YourMeals);
             var key1 = (Console.ReadKey().Key);
             if (key1 == ConsoleKey.LeftArrow)
@@ -256,7 +275,7 @@ while (true)
                 break;
             }
             break;
-        case 3:
+        case 4:
             Console.Write("Enter ingredients (comma-separated): ");
             string ingredientsInput = Console.ReadLine();
             List<string> ingredients = ingredientsInput.Split(',').Select(i => i.Trim()).ToList();
@@ -268,7 +287,7 @@ while (true)
                 break;
             }
             break;
-        case 4:
+        case 5:
             var recpts = meals.Select(x => x.Name).ToArray();
             int ch = Menu(recpts);
 
@@ -283,7 +302,7 @@ while (true)
             break;
 
 
-        case 5:
+        case 6:
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("\t\tYour account:");
             Console.BackgroundColor = ConsoleColor.Black;
@@ -323,7 +342,7 @@ while (true)
                 break;
             }
             break;
-            case 6:
+            case 7:
             exitAnimation();
             return;
             
@@ -957,21 +976,25 @@ class Recipe
     }
 
 }
-
+[Serializable]
 class Comment
 {
+    public string Username { get; set; }
     public int Rate { get; set; }
     public string Commentariy { get; set; }
 
-    //public Comment(int rate, string commentariy)
-    //{
-    //    if (rate <= 5) { 
-    //    Rate= rate;}
-    //    Commentariy= commentariy;
-    //}
+    public Comment(string name,int rate, string commentariy)
+    {
+        Username = name;
+        if (rate <= 5)
+        {
+            Rate = rate;
+        }
+        Commentariy = commentariy;
+    }
     public override string ToString()
     {
-        return $"{Rate}/5\n{Commentariy}";
+        return $">{Username}\n{Rate}/5\n{Commentariy}";
     }
 }
 
@@ -997,16 +1020,37 @@ class Meal : IMeal
     public string Name { get; set; }
     public MealType Type { get; set; }
     public Recipe Recipe { get; set; }
-    public List<Comment> comments { get; set; }
+    public List<Comment> Сomments;
     public Meal()
-    {}
+    {
+        Сomments = new List<Comment>();  // Initialize Comments list in the constructor
+    }
     public Meal(string name, MealType type, Recipe recipe)
     {
-        Name = name; Type = type; Recipe = recipe;
+        Name = name; Type = type; Recipe = recipe; Сomments = new List<Comment>();
     }
+
+    public void AddComment(string username,int rate, string commentary)
+    {
+        Comment com = new Comment(username,rate, commentary);
+        Сomments.Add(com);
+    }
+
     public override string ToString()
     {
-        return $"\t\t{Name}\n\t\t-{Type}\n{Recipe}\n\n";
+        string mealInfo = $"\t\t{Name}\n\t\t-{Type}\n{Recipe}\n";
+
+        if (Сomments != null && Сomments.Any())
+        {
+            mealInfo += "\nComments:\n";
+            foreach (var comment in Сomments)
+            {
+                mealInfo += comment.ToString() + "\n";
+            }
+        }
+
+        mealInfo += "\n";
+        return mealInfo;
     }
 
 }
