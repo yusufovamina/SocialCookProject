@@ -8,109 +8,109 @@ using System.Runtime.Serialization;
 List<User> users = LoadUserCredentials();
 User loggedInUser = new User();
 
-List<Meal> meals = LoadRecipesFromFile("AllMeals.dat");
-//    new List<Meal> {
-//    new Meal
-//    {
-//        Name="Scrambled Eggs",
-//        Type=MealType.Breakfast,
-//        Recipe= new Recipe
-//    {
-//        Name = "Scrambled Eggs",
-//        Ingredients = new List<string> { "Eggs", "Milk", "Salt", "Pepper" },
-//        Instructions = "Whisk eggs, milk, salt, and pepper in a bowl. Heat a non-stick skillet over medium heat. Pour egg mixture into the skillet and cook, stirring, until eggs are set.",
-//        CookingTime = 10
-//    },
-//    },
-//    new Meal{
-//    Name="Pancakes",
-//    Type=MealType.Breakfast,
-//    Recipe = new Recipe
-//    {
-//        Name = "Pancakes",
-//        Ingredients = new List<string> { "Flour", "Milk", "Eggs", "Baking Powder", "Salt", "Sugar" },
-//        Instructions = "In a bowl, mix flour, baking powder, salt, and sugar. In a separate bowl, whisk eggs, add milk and mix well. Combine wet and dry ingredients. Cook spoonfuls of the batter on a greased pan until bubbles form, then flip and cook the other side.",
-//        CookingTime = 20
-//    },
-//    },
-//new Meal
-//{
-//    Name="Chicken Salad",
-//    Type=MealType.Lunch,
-//    Recipe= new Recipe
-//    {
-//        Name = "Chicken Salad",
-//        Ingredients = new List<string> { "Chicken Breast", "Lettuce", "Tomatoes", "Cucumbers", "Olives", "Olive Oil", "Salt", "Pepper" },
-//        Instructions = "Grill the chicken breast, slice into strips. Mix with lettuce, tomatoes, cucumbers, and olives. Drizzle with olive oil and season with salt and pepper.",
-//        CookingTime = 30
-//    },
-//},
-//    new Meal
-//{
-//    Name="Vegetarian Pasta",
-//    Type=MealType.Lunch,
-//    Recipe=  new Recipe
-//    {
-//        Name = "Vegetarian Pasta",
-//        Ingredients = new List<string> { "Pasta", "Bell Peppers", "Zucchini", "Cherry Tomatoes", "Olive Oil", "Garlic", "Basil", "Salt", "Pepper" },
-//        Instructions = "Cook pasta according to package instructions. In a pan, sauté chopped vegetables and garlic in olive oil. Toss with cooked pasta. Season with salt, pepper, and fresh basil.",
-//        CookingTime = 25
-//    },
-//    },
-//    new Meal
-//    {
-//   Name="Chocolate Cake",
-//    Type = MealType.Dessert,
+List<Meal> meals =
+    new List<Meal> {
+    new Meal
+    {
+        Name="Scrambled Eggs",
+        Type=MealType.Breakfast,
+        Recipe= new Recipe
+    {
+        Name = "Scrambled Eggs",
+        Ingredients = new List<string> { "Eggs", "Milk", "Salt", "Pepper" },
+        Instructions = "Whisk eggs, milk, salt, and pepper in a bowl. Heat a non-stick skillet over medium heat. Pour egg mixture into the skillet and cook, stirring, until eggs are set.",
+        CookingTime = 10
+    },
+    },
+    new Meal{
+    Name="Pancakes",
+    Type=MealType.Breakfast,
+    Recipe = new Recipe
+    {
+        Name = "Pancakes",
+        Ingredients = new List<string> { "Flour", "Milk", "Eggs", "Baking Powder", "Salt", "Sugar" },
+        Instructions = "In a bowl, mix flour, baking powder, salt, and sugar. In a separate bowl, whisk eggs, add milk and mix well. Combine wet and dry ingredients. Cook spoonfuls of the batter on a greased pan until bubbles form, then flip and cook the other side.",
+        CookingTime = 20
+    },
+    },
+new Meal
+{
+    Name="Chicken Salad",
+    Type=MealType.Lunch,
+    Recipe= new Recipe
+    {
+        Name = "Chicken Salad",
+        Ingredients = new List<string> { "Chicken Breast", "Lettuce", "Tomatoes", "Cucumbers", "Olives", "Olive Oil", "Salt", "Pepper" },
+        Instructions = "Grill the chicken breast, slice into strips. Mix with lettuce, tomatoes, cucumbers, and olives. Drizzle with olive oil and season with salt and pepper.",
+        CookingTime = 30
+    },
+},
+    new Meal
+{
+    Name="Vegetarian Pasta",
+    Type=MealType.Lunch,
+    Recipe=  new Recipe
+    {
+        Name = "Vegetarian Pasta",
+        Ingredients = new List<string> { "Pasta", "Bell Peppers", "Zucchini", "Cherry Tomatoes", "Olive Oil", "Garlic", "Basil", "Salt", "Pepper" },
+        Instructions = "Cook pasta according to package instructions. In a pan, sauté chopped vegetables and garlic in olive oil. Toss with cooked pasta. Season with salt, pepper, and fresh basil.",
+        CookingTime = 25
+    },
+    },
+    new Meal
+    {
+   Name="Chocolate Cake",
+    Type = MealType.Dessert,
 
-//    Recipe=new Recipe
-//    {
-//    Name = "Chocolate Cake",
-//    Ingredients = new List<string> { "Flour", "Sugar", "Cocoa Powder", "Baking Powder", "Salt", "Eggs", "Milk", "Vegetable Oil", "Vanilla Extract" },
-//    Instructions = "Mix dry ingredients, then add wet ingredients. Pour into a cake pan and bake in a preheated oven. Allow to cool before frosting.",
-//    CookingTime = 40
-//},
-//    },
-//    new Meal
-//    {
-//        Name="Pizza Margarita",
-//        Type =MealType.Dinner,
-//        Recipe= new Recipe
-//        {
-//            Name = "Pizza Margarita",
-//            Ingredients = new List<string> { "Pizza Dough", "Tomato Sauce", "Fresh Mozzarella", "Fresh Basil", "Olive Oil", "Salt" },
-//            Instructions = "Preheat oven to 475°F (245°C). Roll out the pizza dough. Spread tomato sauce over the dough. Add slices of fresh mozzarella. Bake in the preheated oven until crust is golden and cheese is bubbly. Top with fresh basil leaves and a drizzle of olive oil.",
-//            CookingTime = 20
-//        }
-//    },
-//    new Meal
-//    {
-//        Name="Fruit Salad",
-//        Type=MealType.Dessert,
-//        Recipe=new Recipe
-//    {
-//        Name = "Fruit Salad",
-//        Ingredients = new List<string> { "Assorted Fruits (e.g., apples, bananas, berries, oranges)", "Honey", "Lemon Juice", "Mint Leaves" },
-//        Instructions = "Cut fruits into bite-sized pieces and mix in a bowl. Drizzle with honey and lemon juice. Garnish with mint leaves.",
-//        CookingTime = 15
-//    },
-//    },
-//    new Meal
-//    {
-//        Name="Grilled Salmon",
-//        Type=MealType.Dinner,
-//        Recipe= new Recipe
-//    {
-//        Name = "Grilled Salmon",
-//        Ingredients = new List<string> { "Salmon Fillets", "Lemon", "Garlic", "Olive Oil", "Salt", "Pepper" },
-//        Instructions = "Marinate salmon fillets in lemon juice, minced garlic, olive oil, salt, and pepper. Grill until fish is cooked through and flakes easily.",
-//        CookingTime = 60
-//    },
-//    }
+    Recipe=new Recipe
+    {
+    Name = "Chocolate Cake",
+    Ingredients = new List<string> { "Flour", "Sugar", "Cocoa Powder", "Baking Powder", "Salt", "Eggs", "Milk", "Vegetable Oil", "Vanilla Extract" },
+    Instructions = "Mix dry ingredients, then add wet ingredients. Pour into a cake pan and bake in a preheated oven. Allow to cool before frosting.",
+    CookingTime = 40
+},
+    },
+    new Meal
+    {
+        Name="Pizza Margarita",
+        Type =MealType.Dinner,
+        Recipe= new Recipe
+        {
+            Name = "Pizza Margarita",
+            Ingredients = new List<string> { "Pizza Dough", "Tomato Sauce", "Fresh Mozzarella", "Fresh Basil", "Olive Oil", "Salt" },
+            Instructions = "Preheat oven to 475°F (245°C). Roll out the pizza dough. Spread tomato sauce over the dough. Add slices of fresh mozzarella. Bake in the preheated oven until crust is golden and cheese is bubbly. Top with fresh basil leaves and a drizzle of olive oil.",
+            CookingTime = 20
+        }
+    },
+    new Meal
+    {
+        Name="Fruit Salad",
+        Type=MealType.Dessert,
+        Recipe=new Recipe
+    {
+        Name = "Fruit Salad",
+        Ingredients = new List<string> { "Assorted Fruits (e.g., apples, bananas, berries, oranges)", "Honey", "Lemon Juice", "Mint Leaves" },
+        Instructions = "Cut fruits into bite-sized pieces and mix in a bowl. Drizzle with honey and lemon juice. Garnish with mint leaves.",
+        CookingTime = 15
+    },
+    },
+    new Meal
+    {
+        Name="Grilled Salmon",
+        Type=MealType.Dinner,
+        Recipe= new Recipe
+    {
+        Name = "Grilled Salmon",
+        Ingredients = new List<string> { "Salmon Fillets", "Lemon", "Garlic", "Olive Oil", "Salt", "Pepper" },
+        Instructions = "Marinate salmon fillets in lemon juice, minced garlic, olive oil, salt, and pepper. Grill until fish is cooked through and flakes easily.",
+        CookingTime = 60
+    },
+    }
 
-//};
+};
 
-
-
+//List<Meal> list = LoadRecipesFromFile1("AllMeals.dat","");
+//meals= LoadRecipesFromFile1("AllMeals.dat","");
 startAnimation();
 Console.WriteLine("Welcome!");
 string[] startMenu = new string[]
@@ -137,8 +137,8 @@ switch (choice)
         }
         break;
     case 3:
+        exitAnimation();
         return;
-        break;
     default:
         Console.WriteLine("Invalid choice. try again.");
         break;
@@ -152,7 +152,8 @@ while (true)
     "2. Add your recipe",
     "3. Find recipe by ingrediens",
     "4. Save recipes",
-    "5. Your profile"
+    "5. Your profile",
+    "6. Exit"
  };
 
     int choice2 = Menu(menu);
@@ -172,8 +173,16 @@ while (true)
             };
             int choice3 = Menu(displayMenu);
             switch(choice3){
-                case 1:   
-                    meals.ForEach(Console.WriteLine);
+                case 1:
+                    meals[2].comments = new List<Comment> { new Comment { Rate = 4, Commentariy = "Good!" } };
+                   foreach(var m in meals)
+                    {
+                        Console.WriteLine(m);
+                       foreach(var c in m.comments)
+                        {
+                            Console.WriteLine(c);
+                        }
+                    }
                     var k = (Console.ReadKey().Key);
                     if (k == ConsoleKey.LeftArrow)
                     {
@@ -263,7 +272,7 @@ while (true)
             var recpts = meals.Select(x => x.Name).ToArray();
             int ch = Menu(recpts);
 
-            loggedInUser.SaveMeal(meals[ch - 1]);
+            loggedInUser.SaveMeal(meals[ch-1 ]);
             SaveMealsToFile("usersSavedMeals.dat", loggedInUser.SavedMeals,loggedInUser.Name);
             var key7 = (Console.ReadKey().Key);
 
@@ -314,6 +323,10 @@ while (true)
                 break;
             }
             break;
+            case 6:
+            exitAnimation();
+            return;
+            
         default:
             Console.WriteLine("Invalid choice. try again.");
             break;
@@ -327,29 +340,39 @@ while (true)
 
 
 #region Methods
-List<Meal> LoadRecipesFromFile(string filename)
-{
+void exitAnimation() {
+
     
-    List<Meal> meals = new List<Meal>();
 
-    try
+    string name = @"
+.d88888b                    oo          dP  a88888b.                   dP       
+88.                                     88 d8'   `88                   88       
+`Y88888b. .d8888b. .d8888b. dP .d8888b. 88 88        .d8888b. .d8888b. 88  .dP  
+      `8b 88'  `88 88'  `"""" 88 88'  `88 88 88        88'  `88 88'  `88 88888""   
+d8'   .8P 88.  .88 88.  ... 88 88.  .88 88 Y8.   .88 88.  .88 88.  .88 88  `8b. 
+ Y88888P  `88888P' `88888P' dP `88888P8 dP  Y88888P' `88888P' `88888P' dP   `YP 
+
+";
+
+
+
+    string bye = @"
+                          ----THANKS FOR CHOOSING----      ";
+
+    for (int i = 0; i < 20; i++)
     {
-
-        using (FileStream fs = new FileStream(filename, FileMode.Open))
+        try
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            meals = (List<Meal>)bf.Deserialize(fs);
+            Console.Clear();
+            Console.ForegroundColor = (ConsoleColor)i;
+            Console.WriteLine(bye);
+            Console.WriteLine();
+            Console.WriteLine(name);
+            Thread.Sleep(100);
+
         }
+        catch (Exception) { }
     }
-    catch (FileNotFoundException)
-    {
-        Console.WriteLine("File not found");
-    }
-    catch (SerializationException)
-    {
-        Console.WriteLine("Couldn't serialize the file");
-    }
-    return meals;
 }
 
 List<Meal> LoadRecipesFromFile1(string filename,string name)
@@ -418,7 +441,7 @@ void startAnimation()
 
     string greeting = @"
 .d88888b                    oo          dP  a88888b.                   dP       
-88.    ""'                              88 d8'   `88                   88       
+88.                                     88 d8'   `88                   88       
 `Y88888b. .d8888b. .d8888b. dP .d8888b. 88 88        .d8888b. .d8888b. 88  .dP  
       `8b 88'  `88 88'  `"""" 88 88'  `88 88 88        88'  `88 88'  `88 88888""   
 d8'   .8P 88.  .88 88.  ... 88 88.  .88 88 Y8.   .88 88.  .88 88.  .88 88  `8b. 
@@ -446,7 +469,7 @@ d8'   .8P 88.  .88 88.  ... 88 88.  .88 88 Y8.   .88 88.  .88 88.  .88 88  `8b.
    }
 }
 
-static void DisplayMenu(string[] menu, int selectedOption)
+ void DisplayMenu(string[] menu, int selectedOption)
 {
     Console.Clear();
     for (int i = 0; i < menu.Length; i++)
@@ -539,7 +562,7 @@ List<User> LoadUserCredentials()
                                 currentUser.Username = value;
                                 break;
                             case "Password":
-                                currentUser.Password = value;
+                                currentUser.Password = Decrypt(value,1);
                                 break;
                         }
                     }
@@ -573,7 +596,7 @@ void SaveUserCredentials(List<User> users)
                     writer.WriteLine($"Surname:{user.Surname}");
                     writer.WriteLine($"Age:{user.Age}");
                     writer.WriteLine($"Username:{user.Username}");
-                    writer.WriteLine($"Password:{user.Password}");
+                    writer.WriteLine($"Password:{Encrypt(user.Password,1)}");
                 }
             }
         }
@@ -582,6 +605,39 @@ void SaveUserCredentials(List<User> users)
             Console.WriteLine("An error occurred while saving users: " + ex.Message);
         }
     }
+string Encrypt(string text, int shift)
+{
+    string result ="";
+
+    foreach (char ch in text) {
+        
+        if (char.IsLetter(ch))
+        {
+            char shiftedChar = (char)(ch + shift);
+            if ((char.IsLower(ch) && shiftedChar > 'z') || (char.IsUpper(ch) && shiftedChar > 'Z'))
+            {
+                shiftedChar = (char)(ch - (26 - shift));
+            }
+            result += shiftedChar;
+        }
+        else
+        {
+            result += ch;
+        }
+    }
+    return result;
+
+}
+
+
+
+
+
+string Decrypt(string cipherText, int shift)
+{
+    return Encrypt(cipherText, -shift);
+
+}
 
 void Register(List<User> users)
 {
@@ -607,7 +663,7 @@ void Register(List<User> users)
     string password = GetMaskedPassword();
     while(!isStrongPassword(password))
     {
-        Console.Write("Enter a password: ");
+        Console.Write("Password is not strong enough! Password must be 8 letter-length,\ncontain at least one number, capital letter and lowercase letter.\nEnter a password: ");
         password = GetMaskedPassword();
     }
 
@@ -702,7 +758,7 @@ class User : Person
 
     public string Username { get; set; }
     public string Password { get; set; }
-    public List<Meal> SavedMeals { get; set; } 
+    public List<Meal> SavedMeals { get; set; } = new List<Meal>();
 
     public List<Meal> YourMeals { get; set; } = new List<Meal>();
     public User()
@@ -751,32 +807,10 @@ class User : Person
     }
 
 
-    void SaveUsersMealsToFile(string filename, List<Meal> meals, string name)
 
+ static   void SaveUsersMealsToFile(string filename, List<Meal> meals, string name)
     {
         string namefile = name + filename;
-
-        try
-        {
-
-            using (FileStream fs = new FileStream(namefile, FileMode.Create))
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(fs, meals);
-            }
-        }
-        catch (FileNotFoundException)
-        {
-            Console.WriteLine("File not found");
-        }
-        catch (SerializationException)
-        {
-            Console.WriteLine("Couldn't serialize the file");
-        }
-
-    }
- static   void SaveUsersMealsToFile(string filename, List<Meal> meals)
-    {
         try
         {
 
@@ -843,10 +877,10 @@ class User : Person
         Meal newMeal = new Meal(name, type, new Recipe(name, ingredients, instructions, time, this.Username));
 
         YourMeals.Add(newMeal);
-        SaveUsersMealsToFile("userMeals.dat", YourMeals, Username);
+        saving("userMeals.dat", YourMeals, Username);
         meals.Add(newMeal);
 
-        saving("Allmeals.dat", meals);
+        saving("Allmeals.dat", meals,"");
         
 
         Console.WriteLine("Recipe added successfully!");
@@ -924,6 +958,22 @@ class Recipe
 
 }
 
+class Comment
+{
+    public int Rate { get; set; }
+    public string Commentariy { get; set; }
+
+    //public Comment(int rate, string commentariy)
+    //{
+    //    if (rate <= 5) { 
+    //    Rate= rate;}
+    //    Commentariy= commentariy;
+    //}
+    public override string ToString()
+    {
+        return $"{Rate}/5\n{Commentariy}";
+    }
+}
 
 enum MealType
 {
@@ -947,6 +997,7 @@ class Meal : IMeal
     public string Name { get; set; }
     public MealType Type { get; set; }
     public Recipe Recipe { get; set; }
+    public List<Comment> comments { get; set; }
     public Meal()
     {}
     public Meal(string name, MealType type, Recipe recipe)
@@ -955,9 +1006,9 @@ class Meal : IMeal
     }
     public override string ToString()
     {
-        return $"\t\t{Name}\n\t\t-{Type}\n{Recipe}";
+        return $"\t\t{Name}\n\t\t-{Type}\n{Recipe}\n\n";
     }
 
 }
 
-delegate void fileOperationsDelegate(string filename, List<Meal> meals);
+delegate void fileOperationsDelegate(string filename, List<Meal> meals,string name);
