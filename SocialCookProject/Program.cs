@@ -10,7 +10,7 @@ List<User> users = LoadUserCredentials();
 User loggedInUser = new User();
 
 List<Meal> meals =
-    new List<Meal> {
+  new List<Meal> {
     new Meal
     {
         Name="Scrambled Eggs",
@@ -41,7 +41,7 @@ new Meal
     Recipe= new Recipe
     {
         Name = "Chicken Salad",
-        Ingredients = new List<string> { "Chicken Breast", "Lettuce", "Tomatoes", "Cucumbers", "Olives", "Olive Oil", "Salt", "Pepper" },
+        Ingredients = new List<string> { "Chicken", "Lettuce", "Tomatoes", "Cucumbers", "Olives", "Oil", "Salt", "Pepper" },
         Instructions = "Grill the chicken breast, slice into strips. Mix with lettuce, tomatoes, cucumbers, and olives. Drizzle with olive oil and season with salt and pepper.",
         CookingTime = 30
     },
@@ -110,7 +110,6 @@ new Meal
 
 };
 
-//List<Meal> list = LoadRecipesFromFile1("AllMeals.dat","");
 meals= LoadRecipesFromFile1("AllMeals.dat","");
 startAnimation();
 Console.WriteLine("Welcome!");
@@ -171,7 +170,8 @@ while (true)
                 "3. See lunch meals",
                 "4. See dinner meals",
                 "5. See dessert meals",
-                "6. See fast-cookking meals"
+                "6. See fast-cookking meals",
+                "7. See top recipes"
             };
             int choice3 = Menu(displayMenu);
             switch(choice3){
@@ -234,7 +234,12 @@ while (true)
                     if (k5 == ConsoleKey.LeftArrow) break;
                     
                     break;
-
+                case 7:
+                    var topMeals = meals.OrderByDescending(meal => meal.Сomments.Any() ? meal.Сomments.Average(comment => comment.Rate) : 0).ToList();
+                    topMeals.ForEach(Console.WriteLine);
+                    var k0 = (Console.ReadKey().Key);
+                    if (k0 == ConsoleKey.LeftArrow) break;
+                    break;
             }
 
             var key = (Console.ReadKey().Key);
@@ -263,7 +268,7 @@ while (true)
           Console.WriteLine("Comment added successfully!");
                
 
-            meals[ch1 ].AddComment(loggedInUser.Username, rate,com);
+            meals[ch1 -1].AddComment(loggedInUser.Username, rate,com);
             SaveMealsToFile("AllMeals.dat", meals, "");
 
             break;
@@ -354,7 +359,6 @@ while (true)
 
 
 }
-
 
 
 
@@ -769,235 +773,6 @@ abstract class Person
     public abstract int Age { get; set; }
 }
 
-class User : Person
-{
-    public override string Name { get; set; }
-    public override string Surname { get; set; }
-    public override int Age { get; set; }
-
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public List<Meal> SavedMeals { get; set; } = new List<Meal>();
-
-    public List<Meal> YourMeals { get; set; } = new List<Meal>();
-    public User()
-    {
-
-    }
-    public User(string name, string surname, int age, string username, string password)
-    {
-        Name = name;
-        Surname = surname;
-        Age = age;
-        Username = username;
-        Password = password;
-        SavedMeals = new List<Meal>();
-        YourMeals = new List<Meal>();
-    }
-
-
-    public void SaveMeal(Meal meal)
-    {
-        SavedMeals.Add(meal);
-
-        Console.WriteLine($"Recipe '{meal.Name}' saved in your account.");
-    }
-
-  
-
-    public void DisplaySavedRecipes()
-    {
-        Console.WriteLine("Saved recipes:");
-        if (SavedMeals.Count == 0)
-        {
-            Console.WriteLine("No saved recipes found");
-        }
-        else
-        {
-            foreach (var meal in SavedMeals)
-            {
-                if (meal.Recipe != null)
-                {
-                    Console.WriteLine($"{meal}");
-                    Console.WriteLine();
-                }
-            }
-        }
-    }
-
-
-
- static   void SaveUsersMealsToFile(string filename, List<Meal> meals, string name)
-    {
-        string namefile = name + filename;
-        try
-        {
-
-            using (FileStream fs = new FileStream(filename, FileMode.Create))
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(fs, meals);
-            }
-        }
-        catch (FileNotFoundException)
-        {
-            Console.WriteLine("File not found");
-        }
-        catch (SerializationException)
-        {
-            Console.WriteLine("Couldn't serialize the file");
-        }
-
-    }
-    fileOperationsDelegate saving = new(SaveUsersMealsToFile);
-    public void AddRecipe(List<Meal> meals, List<Meal> YourMeals)
-
-    {
-        Console.Write("Enter recipe name: ");
-        string name = Console.ReadLine().Trim();
-
-        Console.Write("Enter ingredients (comma-separated): ");
-        List<string> ingredients = Console.ReadLine().Split(',').Select(i => i.Trim()).ToList();
-
-        Console.Write("Enter instructions: ");
-        string instructions = Console.ReadLine().Trim();
-
-        Console.WriteLine("Enter the cooking time(minutes): ");
-        int time = int.Parse(Console.ReadLine());
-
-        Console.WriteLine("Select a meal type:");
-        Console.WriteLine("1. Breakfast");
-        Console.WriteLine("2. Lunch");
-        Console.WriteLine("3. Dinner");
-        Console.WriteLine("4. Dessert");
-
-        int choice = int.Parse(Console.ReadLine());
-
-        MealType type;
-        switch (choice)
-        {
-            case 1:
-                type = MealType.Breakfast;
-                break;
-            case 2:
-                type = MealType.Lunch;
-                break;
-            case 3:
-                type = MealType.Dinner;
-                break;
-            case 4:
-                type = MealType.Dessert;
-                break;
-            default:
-                Console.WriteLine("Invalid meal type. Recipe not added.");
-                return;
-        }
-
-        Meal newMeal = new Meal(name, type, new Recipe(name, ingredients, instructions, time, this.Username));
-
-        YourMeals.Add(newMeal);
-        saving("userMeals.dat", YourMeals, Username);
-        meals.Add(newMeal);
-
-        saving("Allmeals.dat", meals,"");
-        
-
-        Console.WriteLine("Recipe added successfully!");
-    }
-
-    public void SearchRecipesByIngredients(List<string> ingredients, List<Meal> meals)
-    {
-        bool foundMatchingMeal = false;
-
-        foreach (var meal in meals)
-        {
-
-            if (ingredients.All(meal.Recipe.Ingredients.Contains))
-            {
-                foundMatchingMeal = true;
-                Console.WriteLine();
-                Console.WriteLine(meal);
-                Console.WriteLine();
-                Console.WriteLine("Missing Ingredients:");
-                var missingIngredients = meal.Recipe.Ingredients.Where(ingredient => !ingredients.Contains(ingredient)).ToList();
-
-                if (missingIngredients.Any())
-                {
-                    foreach (var ingredient in missingIngredients)
-                    {
-                        Console.WriteLine($"- {ingredient}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("None");
-                }
-                Console.WriteLine();
-            }
-        }
-
-        if (!foundMatchingMeal)
-        {
-            Console.WriteLine("No recipes found containing the given ingredients.");
-        }
-    }
-
-    public override string ToString()
-    {
-        return $"Name: {Name}\nSurname: {Surname}\nAge: {Age}\nUsername: {Username}";
-    }
-}
-[Serializable]
-class Recipe
-{
-    public string Name { get; set; }
-    public List<string> Ingredients { get; set; }
-    public string Instructions { get; set; }
-    public int CookingTime { get; set; }
-    public string Author { get; set; } = "Admin";
-
-    public Recipe(string name, List<string> ingredients, string instructions, int cookingTime, string author)
-    {
-        Name = name; Ingredients = ingredients;
-        Instructions = instructions; CookingTime = cookingTime;
-        Author = author;
-    }
-    public Recipe()
-    {
-
-    }
-
-    public override string ToString()
-    {
-        return $"\nRecipe: {Name} (by {Author})\n" +
-               $"Cooking Time: {CookingTime} minutes\n" +
-               $"Ingredients: {string.Join(", ", Ingredients)}\n" +
-               $"Instructions: {Instructions}\n";
-    }
-
-}
-[Serializable]
-class Comment
-{
-    public string Username { get; set; }
-    public int Rate { get; set; }
-    public string Commentariy { get; set; }
-
-    public Comment(string name,int rate, string commentariy)
-    {
-        Username = name;
-        if (rate <= 5)
-        {
-            Rate = rate;
-        }
-        Commentariy = commentariy;
-    }
-    public override string ToString()
-    {
-        return $">{Username}\n{Rate}/5\n{Commentariy}";
-    }
-}
-
 enum MealType
 {
     Breakfast,
@@ -1011,47 +786,6 @@ interface IMeal
     public MealType Type { get; set; }
     public Recipe Recipe { get; set; }
 
-
-}
-
-[Serializable]
-class Meal : IMeal
-{
-    public string Name { get; set; }
-    public MealType Type { get; set; }
-    public Recipe Recipe { get; set; }
-    public List<Comment> Сomments;
-    public Meal()
-    {
-        Сomments = new List<Comment>();  // Initialize Comments list in the constructor
-    }
-    public Meal(string name, MealType type, Recipe recipe)
-    {
-        Name = name; Type = type; Recipe = recipe; Сomments = new List<Comment>();
-    }
-
-    public void AddComment(string username,int rate, string commentary)
-    {
-        Comment com = new Comment(username,rate, commentary);
-        Сomments.Add(com);
-    }
-
-    public override string ToString()
-    {
-        string mealInfo = $"\t\t{Name}\n\t\t-{Type}\n{Recipe}\n";
-
-        if (Сomments != null && Сomments.Any())
-        {
-            mealInfo += "\nComments:\n";
-            foreach (var comment in Сomments)
-            {
-                mealInfo += comment.ToString() + "\n";
-            }
-        }
-
-        mealInfo += "\n";
-        return mealInfo;
-    }
 
 }
 
