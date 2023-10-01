@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Net.NetworkInformation;
 
 class User : Person
 {
@@ -138,39 +139,36 @@ class User : Person
 
     public void SearchRecipesByIngredients(List<string> ingredients, List<Meal> meals)
     {
-        bool foundMatchingMeal = false;
+        var matchingRecipes = meals.Where(m => m.Recipe.Ingredients.Any(x => ingredients.Any(inputIng =>
+                x.IndexOf(inputIng, StringComparison.OrdinalIgnoreCase) >= 0)));
 
-        foreach (var meal in meals)
-        {
-
-            if (ingredients.All(meal.Recipe.Ingredients.Contains))
+       
+            if (matchingRecipes.Any())
             {
-                foundMatchingMeal = true;
+          foreach(var meal in matchingRecipes) { 
                 Console.WriteLine();
                 Console.WriteLine(meal);
                 Console.WriteLine();
+            var missingIngredients = meal.Recipe.Ingredients.Where(ing => ingredients.All(inputIng =>
+               !ing.Contains(inputIng, StringComparison.OrdinalIgnoreCase)))
+           .ToList();
+
+            if (missingIngredients.Any())
+            {
                 Console.WriteLine("Missing Ingredients:");
-                var missingIngredients = meal.Recipe.Ingredients.Where(ingredient => !ingredients.Contains(ingredient)).ToList();
-
-                if (missingIngredients.Any())
+                foreach (var missingIngredient in missingIngredients)
                 {
-                    foreach (var ingredient in missingIngredients)
-                    {
-                        Console.WriteLine($"- {ingredient}");
-                    }
+                    Console.WriteLine($"- {missingIngredient}");
                 }
-                else
-                {
-                    Console.WriteLine("None");
-                }
-                Console.WriteLine();
             }
-        }
 
-        if (!foundMatchingMeal)
-        {
-            Console.WriteLine("No recipes found containing the given ingredients.");
+            Console.WriteLine();
         }
+    }
+    else
+    {
+        Console.WriteLine("No recipes found with the specified ingredients.");
+    }
     }
 
     public override string ToString()

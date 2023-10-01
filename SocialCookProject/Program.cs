@@ -53,7 +53,7 @@ new Meal
     Recipe=  new Recipe
     {
         Name = "Vegetarian Pasta",
-        Ingredients = new List<string> { "Pasta", "Bell Peppers", "Zucchini", "Cherry Tomatoes", "Olive Oil", "Garlic", "Basil", "Salt", "Pepper" },
+        Ingredients = new List<string> { "Pasta", "Peppers", "Zucchini", "Cherry Tomatoes", "Olive Oil", "Garlic", "Basil", "Salt", "Pepper" },
         Instructions = "Cook pasta according to package instructions. In a pan, sauté chopped vegetables and garlic in olive oil. Toss with cooked pasta. Season with salt, pepper, and fresh basil.",
         CookingTime = 25
     },
@@ -151,7 +151,7 @@ while (true)
     "1. See recipes",
     "2. Rate and comment recipes",
     "3. Add your recipe",
-    "4. Find recipe by ingrediens",
+    "4. Find recipes",
     "5. Save recipes",
     "6. Your profile",
     "7. Exit"
@@ -263,11 +263,8 @@ while (true)
                 Console.Write("Enter your rating (1-5): ");
                 int.Parse(Console.ReadLine());
             }
-            
-          
           Console.WriteLine("Comment added successfully!");
-               
-
+            
             meals[ch1 -1].AddComment(loggedInUser.Username, rate,com);
             SaveMealsToFile("AllMeals.dat", meals, "");
 
@@ -281,10 +278,42 @@ while (true)
             }
             break;
         case 4:
-            Console.Write("Enter ingredients (comma-separated): ");
-            string ingredientsInput = Console.ReadLine();
-            List<string> ingredients = ingredientsInput.Split(',').Select(i => i.Trim()).ToList();
-            loggedInUser.SearchRecipesByIngredients(ingredients, meals);
+            string[] searchMenu = new string[]
+            { "1. Search by ingredients",
+            "2. Search by name",
+            "3. Search by author"
+            };
+            int searchChoice = Menu(searchMenu);
+            switch (searchChoice)
+            {
+                case 1:  
+                    Console.Write("Enter ingredients (comma-separated): ");
+                    string ingredientsInput = Console.ReadLine();
+                    List<string> ingredients = ingredientsInput.Split(',').Select(i => i.Trim()).ToList();
+                    loggedInUser.SearchRecipesByIngredients(ingredients, meals);
+                    var a = (Console.ReadKey().Key);
+                    if (a == ConsoleKey.LeftArrow) break;
+                    break;
+                case 2:
+                    Console.WriteLine("Enter name: ");
+                    string name= Console.ReadLine();
+                    var nameMeals = meals.Where(x=>x.Name.Contains(name)).OrderBy(x => x.Name).ToList();
+                    nameMeals.ForEach(Console.WriteLine);
+                    var b = (Console.ReadKey().Key);
+                    if (b == ConsoleKey.LeftArrow) break;
+                    break;
+                case 3:
+                    Console.WriteLine("Enter author's name: ");
+                    string author = Console.ReadLine();
+                    var authorMeals = meals.Where(x => x.Recipe.Author.StartsWith(author)).OrderBy(x => x.Name).ToList();
+                    authorMeals.ForEach(Console.WriteLine);
+
+                    var c = (Console.ReadKey().Key);
+                    if (c == ConsoleKey.LeftArrow) break;
+                    break;
+
+            }
+         
             var key2 = (Console.ReadKey().Key);
 
             if (key2 == ConsoleKey.LeftArrow)
@@ -320,8 +349,6 @@ while (true)
                 "2. See your recipes",
 
              };
-
-
                 int profile_choice = Menu(profile_menu);
 
                 switch (profile_choice)
@@ -334,18 +361,12 @@ while (true)
                     case 2:
                         loggedInUser.YourMeals = meals.Where(x => x.Recipe.Author == loggedInUser.Username).ToList();
                         loggedInUser.YourMeals.ForEach(Console.WriteLine);
-                       
                         break;
 
                 }
             }
-
-
             var key4 = (Console.ReadKey().Key);
-            if (key4 == ConsoleKey.LeftArrow)
-            {
-                break;
-            }
+            if (key4 == ConsoleKey.LeftArrow) break;
             break;
             case 7:
             exitAnimation();
