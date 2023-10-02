@@ -431,7 +431,7 @@ List<Meal> LoadRecipesFromFile1(string filename,string name)
         {
             BinaryFormatter bf = new BinaryFormatter();
             meals = (List<Meal>)bf.Deserialize(fs);
-        }
+        }  
     }
     catch (FileNotFoundException)
     {
@@ -516,17 +516,20 @@ d8'   .8P 88.  .88 88.  ... 88 88.  .88 88 Y8.   .88 88.  .88 88.  .88 88  `8b.
  void DisplayMenu(string[] menu, int selectedOption)
 {
     Console.Clear();
+    Console.BackgroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("\t\t\t\t---MENU---");
+    Console.BackgroundColor = ConsoleColor.Black;
     for (int i = 0; i < menu.Length; i++)
     {
         if (i == selectedOption)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("> " + menu[i]);
+            Console.WriteLine("\t\t\t> " + menu[i]);
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("  " + menu[i]);
+            Console.WriteLine("\t\t\t  " + menu[i]);
         }
 
 
